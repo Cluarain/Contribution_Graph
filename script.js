@@ -37,25 +37,20 @@ $(document).ready(function () {
                 const contributions = contributionData[dateString] || 0;
 
                 let colorClass = 'white';
-                let textContributions = 'Нет контрибуций';
 
                 if (contributions >= 1 && contributions <= 9) {
                     colorClass = 'light-gray';
-                    textContributions = '1-9 контрибуций';
                 } else if (contributions >= 10 && contributions <= 19) {
                     colorClass = 'gray';
-                    textContributions = '10-19 контрибуций';
                 } else if (contributions >= 20 && contributions <= 29) {
                     colorClass = 'dark-gray';
-                    textContributions = '20-29 контрибуций';
                 } else if (contributions >= 30) {
                     colorClass = 'black';
-                    textContributions = '30+ контрибуций';
                 }
 
 
                 graph += `<div class="contribution-block tooltip ${colorClass}">
-            <div class="top-title">${textContributions}<br>
+            <div class="top-title">${contributions} контрибуций<br>
             <div class="top-date">${formatDateToString(dateString)}</div></div>
           </div>
           `;
@@ -78,5 +73,3 @@ $(document).ready(function () {
 
         
 });
-
-
