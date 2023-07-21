@@ -38,31 +38,40 @@ $(document).ready(function () {
         return `${year}-${formattedMonth}-${formattedDay}`;
     }
 
+    function getMonthAsText(inputDate) {
+        const months = [
+            'Янв.', 'Февр.', 'Март', 'Апр.', 'Май', 'Июнь', 'Июль', 'Авг.', 'Сент.', 'Окт.', 'Нояб.', 'Дек.'
+        ];
+        const monthIndex = inputDate.getMonth();
+        return months[monthIndex];
+    }
+
     function createGraph(contributionData) {
         const today = new Date();
         const endDate = getPreviousMondayFromDate(today);
         endDate.setDate(today.getDate() - weeksToShow * 7);
         let currentDate = getPreviousMondayFromDate(endDate);
 
-
         let monthTitle = `<div class="month">${getMonthAsText(currentDate)}</div>`;
         let currentMonth = getMonthAsText(currentDate);
 
         let graph = '';
 
-        const daysOfWeek = ['Пн', '&nbsp;', 'Ср', '&nbsp;', 'Пт', '&nbsp;', '&nbsp;'];
-
         // Добавляем столбец с днями недели
+        const daysOfWeek = ['Пн', '&nbsp;', 'Ср', '&nbsp;', 'Пт', '&nbsp;', '&nbsp;'];
         for (let col = 0; col < 7; col++) {
             graph += `<div class="contribution-block">${daysOfWeek[col]}</div>`;
         }
+
         //основоной график
         for (let row = 0; row < weeksToShow + 1; row++) {
-            
+
             for (let col = 0; col < 7; col++) {
 
                 const dateString = currentDate.toLocaleDateString().split('/').reverse().join('-');
                 const contributions = contributionData[convertDate(dateString)] || 0;
+
+                console.log(currentDate, contributions);
 
                 let colorClass = 'white';
                 if (contributions >= 1 && contributions <= 9) {
@@ -76,19 +85,17 @@ $(document).ready(function () {
                 }
 
                 graph += `<div class="contribution-block tooltip ${colorClass}">
-        <div class="top-title">${contributions} контрибуций<br>
-        <div class="top-date">${formatDateToString(dateString)}</div></div>
-      </div>
-      `;
+                <div class="top-title">${contributions} контрибуций<br>
+                <div class="top-date">${formatDateToString(dateString)}</div></div>
+                </div>`;
                 currentDate.setDate(currentDate.getDate() + 1);
             }
-            
-            if  (currentMonth !== getMonthAsText(currentDate)){
+
+            if (currentMonth !== getMonthAsText(currentDate)) {
                 currentMonth = getMonthAsText(currentDate);
                 monthTitle += `<div class="month">${currentMonth}</div>`;
             }
         }
-
         $('.monthTitle').html(monthTitle);
         $('.contribution-graph').html(graph);
     }
@@ -101,11 +108,5 @@ $(document).ready(function () {
             $('.contribution-graph').text('Failed to load data.');
         });
 
-    function getMonthAsText(inputDate) {
-        const months = [
-            'Янв.', 'Февр.', 'Март', 'Апр.', 'Май', 'Июнь', 'Июль', 'Авг.', 'Сент.', 'Окт.', 'Нояб.', 'Дек.'
-        ];
-        const monthIndex = inputDate.getMonth();
-        return months[monthIndex];
-    }
+
 });
