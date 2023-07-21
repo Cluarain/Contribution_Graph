@@ -78,7 +78,9 @@ body {
   background-color: #254e77;
 }
 
-
+.colorBorder{
+  background-color: rgba(0, 100, 0, 0.5);
+}
 
 .legend p {
   margin: 0;

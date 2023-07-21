@@ -9,19 +9,6 @@ $(document).ready(function () {
         });
     }
 
-    function formatDateToString(inputDate) {
-        const [year, day, month] = inputDate.split('-');
-        const date = new Date(year, month - 1, day);
-
-        const options = {
-            weekday: 'long',
-            month: 'long',
-            day: 'numeric',
-            year: 'numeric'
-        };
-
-        return date.toLocaleDateString('ru-RU', options);
-    }
 
     function getPreviousMondayFromDate(date) {
         const dayOfWeek = date.getDay();
@@ -31,11 +18,24 @@ $(document).ready(function () {
         return previousMonday;
     }
 
-    function convertDate(inputDate) {
-        const [year, day, month] = inputDate.split('-').map(item => parseInt(item, 10));
-        const formattedDay = String(day).padStart(2, '0');
-        const formattedMonth = String(month).padStart(2, '0');
-        return `${year}-${formattedMonth}-${formattedDay}`;
+    function formatDateToString(inputDate) {
+        const [year, month, day] = inputDate.split('-');
+        const date = new Date(year, month - 1, day);
+        const options = {
+            weekday: 'long',
+            month: 'long',
+            day: 'numeric',
+            year: 'numeric'
+        };
+        return date.toLocaleDateString('ru-RU', options);
+    }
+
+    function formatDateToCommonFormat(date) {
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+
+        return `${year}-${month}-${day}`;
     }
 
     function getMonthAsText(inputDate) {
@@ -45,7 +45,14 @@ $(document).ready(function () {
         const monthIndex = inputDate.getMonth();
         return months[monthIndex];
     }
-
+    function isToday(date) {
+        const today = new Date();
+        return (
+          date.getDate() === today.getDate() &&
+          date.getMonth() === today.getMonth() &&
+          date.getFullYear() === today.getFullYear()
+        );
+      }
     function createGraph(contributionData) {
         const today = new Date();
         const endDate = getPreviousMondayFromDate(today);
@@ -68,10 +75,13 @@ $(document).ready(function () {
 
             for (let col = 0; col < 7; col++) {
 
-                const dateString = currentDate.toLocaleDateString().split('/').reverse().join('-');
-                const contributions = contributionData[convertDate(dateString)] || 0;
-
-                console.log(currentDate, contributions);
+                const contributions = contributionData[formatDateToCommonFormat(currentDate)] || 0;
+ 
+                // console.log(currentDate, contributions);
+                let colorBorder = '';
+                if (isToday(currentDate)){
+                    colorBorder = 'colorBorder';
+                }
 
                 let colorClass = 'white';
                 if (contributions >= 1 && contributions <= 9) {
@@ -84,9 +94,9 @@ $(document).ready(function () {
                     colorClass = 'black';
                 }
 
-                graph += `<div class="contribution-block tooltip ${colorClass}">
+                graph += `<div class="contribution-block tooltip ${colorClass} ${colorBorder}">
                 <div class="top-title">${contributions} контрибуций<br>
-                <div class="top-date">${formatDateToString(dateString)}</div></div>
+                <div class="top-date">${formatDateToString(formatDateToCommonFormat(currentDate))}</div></div>
                 </div>`;
                 currentDate.setDate(currentDate.getDate() + 1);
             }
@@ -103,10 +113,9 @@ $(document).ready(function () {
     getContributionData()
         .done(function (data) {
             createGraph(data);
+            // console.log(data);
         })
         .fail(function () {
             $('.contribution-graph').text('Failed to load data.');
         });
-
-
 });
