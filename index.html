@@ -1,1 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
 
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contribution Graph</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="graph-container">
+        <div class="contribution-graph justify-content-start"></div>
+        <div class="legend">
+            <p class="fw-light">Меньше</p>
+            <div class="contribution-block tooltip white">
+                <div class="top-title">Нет контрибуций</div>
+            </div>
+            <div class="contribution-block tooltip light-gray ">
+                <div class="top-title">1-9 контрибуций</div>
+            </div>
+            <div class="contribution-block tooltip gray">
+                <div class="top-title">10-19 контрибуций</div>
+            </div>
+            <div class="contribution-block tooltip dark-gray">
+                <div class="top-title">20-29 контрибуций</div>
+            </div>
+            <div class="contribution-block tooltip black">
+                <div class="top-title">30+ контрибуций</div>
+            </div>
+            <p class="fw-light">Больше</p>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="script.js">
+
+    </script>
+
+</body>
+
+</html>
